@@ -5,8 +5,7 @@
     "module": "commonjs",
     "outDir": "./lib"
   },
-  "include": [
-    //"./src/backend/*.ts",
+  "include": [    
     "./src/common/*.ts"
   ],
   "exclude": [
