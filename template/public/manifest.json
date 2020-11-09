@@ -1,6 +1,6 @@
 {
-  "short_name": "basic-viewport-app",
-  "name": "Basic Viewport App",
+  "short_name": "iModeljs",
+  "name": "iModeljs",
   "icons": [
     {
       "src": "favicon.ico",

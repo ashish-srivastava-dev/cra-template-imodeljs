@@ -8,7 +8,7 @@
       "comments": {
         "major": [
           {
-            "comment": "Add CRA template for the Basic Viewport App"
+            "comment": "Added Create React App template for the iModeljs App"
           }
         ]
       }

@@ -1,7 +1,3 @@
-/*---------------------------------------------------------------------------------------------
-* Copyright (c) Bentley Systems, Incorporated. All rights reserved.
-* See LICENSE.md in the project root for license terms and full copyright notice.
-*--------------------------------------------------------------------------------------------*/
 import { Config, Id64, Id64String, OpenMode } from "@bentley/bentleyjs-core";
 import { ContextRegistryClient, Project } from "@bentley/context-registry-client";
 import "@bentley/icons-generic-webfont/dist/bentley-icons-generic-webfont.css";
@@ -10,7 +6,7 @@ import { AuthorizedFrontendRequestContext, DrawingViewState, FrontendRequestCont
 import { SignIn, ViewportComponent } from "@bentley/ui-components";
 import { Button, ButtonSize, ButtonType, Spinner, SpinnerSize } from "@bentley/ui-core";
 import * as React from "react";
-import { BasicViewportApp } from "../api/BasicViewportApp";
+import { iModeljsApp } from "../api/iModeljs";
 import "./App.css";
 import Toolbar from "./Toolbar";
 
@@ -34,7 +30,7 @@ export default class App extends React.Component<{}, AppState> {
     super(props, context);
     this.state = {
       user: {
-        isAuthorized: BasicViewportApp.oidcClient.isAuthorized,
+        isAuthorized: iModeljsApp.oidcClient.isAuthorized,
         isLoading: false,
       },
     };
@@ -42,21 +38,21 @@ export default class App extends React.Component<{}, AppState> {
 
   public componentDidMount() {
     // Initialize authorization state, and add listener to changes
-    BasicViewportApp.oidcClient.onUserStateChanged.addListener(this._onUserStateChanged);
+    iModeljsApp.oidcClient.onUserStateChanged.addListener(this._onUserStateChanged);
   }
 
   public componentWillUnmount() {
     // unsubscribe from user state changes
-    BasicViewportApp.oidcClient.onUserStateChanged.removeListener(this._onUserStateChanged);
+    iModeljsApp.oidcClient.onUserStateChanged.removeListener(this._onUserStateChanged);
   }
 
   private _onStartSignin = async () => {
     this.setState((prev) => ({ user: { ...prev.user, isLoading: true } }));
-    BasicViewportApp.oidcClient.signIn(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
+    iModeljsApp.oidcClient.signIn(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
   }
 
   private _onUserStateChanged = () => {
-    this.setState((prev) => ({ user: { ...prev.user, isAuthorized: BasicViewportApp.oidcClient.isAuthorized, isLoading: false } }));
+    this.setState((prev) => ({ user: { ...prev.user, isAuthorized: iModeljsApp.oidcClient.isAuthorized, isLoading: false } }));
   }
 
   /** Pick the first available spatial view definition in the imodel */
@@ -186,8 +182,8 @@ class OpenIModelButton extends React.PureComponent<OpenIModelButtonProps, OpenIM
   }
 
   private _onClickSignOut = async () => {
-    if (BasicViewportApp.oidcClient)
-      BasicViewportApp.oidcClient.signOut(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
+    if (iModeljsApp.oidcClient)
+      iModeljsApp.oidcClient.signOut(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
   }
 
   public render() {

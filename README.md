@@ -1,6 +1,7 @@
 # cra-template-imodeljs
 
-This is a template for an iModel.js sample application that is based on the [Basic Viewport App](https://github.com/imodeljs/imodeljs-samples/tree/master/interactive-app/basic-viewport-app) for [Create React App](https://github.com/facebook/create-react-app).  
+This is a [Create React App](https://github.com/facebook/create-react-app) template for an iModel.js sample application.
+
 It demonstrates the minimum setup for opening an iModel and viewing its graphics in a viewport with basic viewing tools. 
 
 * _Viewport_: Renders geometric data onto an HTMLCanvasElement.
@@ -25,7 +26,6 @@ For more information, please refer to:
 
 - [Getting Started](https://create-react-app.dev/docs/getting-started) – How to create a new app.
 - [User Guide](https://create-react-app.dev) – How to develop apps bootstrapped with Create React App.
-- [Basic Viewport App](https://github.com/imodeljs/imodeljs-samples/tree/master/interactive-app/basic-viewport-app) - Basic Viewport App
 
 
 ## Purpose
@@ -34,8 +34,7 @@ The purpose of this sample application is to demonstrate the following:
 
 * [Dependencies](./package.json) required for iModel.js-based frontend applications.
 * [Scripts](./package.json) recommended to build and run iModel.js-based applications.
-* How to set up a simple [backend for web](./src/backend/BackendServer.ts) and
-* How to set up a simple [frontend for web](./src/frontend/api/BasicViewportApp.ts).
+* How to set up a simple [frontend for web](./src/frontend/api/iModeljsApp.ts).
 * How to obtain an [access token](https://www.imodeljs.org/learning/common/accesstoken/) used to access iModelHub and other services.
 * How to [consume](./src/frontend/components/App.tsx) iModel.js React components.
 * How to [setup a viewport](./src/frontend/components/App.tsx#L106).

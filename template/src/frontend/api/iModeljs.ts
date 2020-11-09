@@ -1,7 +1,3 @@
-/*---------------------------------------------------------------------------------------------
-* Copyright (c) Bentley Systems, Incorporated. All rights reserved.
-* See LICENSE.md in the project root for license terms and full copyright notice.
-*--------------------------------------------------------------------------------------------*/
 import { ClientRequestContext, Config } from "@bentley/bentleyjs-core";
 import { BrowserAuthorizationCallbackHandler, BrowserAuthorizationClient, BrowserAuthorizationClientConfiguration } from "@bentley/frontend-authorization-client";
 import { BentleyCloudRpcManager, BentleyCloudRpcParams } from "@bentley/imodeljs-common";
@@ -11,10 +7,10 @@ import { UiComponents } from "@bentley/ui-components";
 import { getSupportedRpcs } from "../../common/rpcs";
 
 /**
- * List of possible backends that basic-viewport-app can use
+ * List of possible backends that iModeljs-app can use
  */
 export enum UseBackend {
-  /** Use local basic-viewport-app backend */
+  /** Use local iModeljs-app backend */
   Local = 0,
 
   /** Use deployed general-purpose backend */
@@ -22,7 +18,7 @@ export enum UseBackend {
 }
 
 // Boiler plate code
-export class BasicViewportApp {
+export class iModeljsApp {
 
   public static get oidcClient() { return IModelApp.authorizationClient as BrowserAuthorizationClient; }
 
@@ -30,14 +26,14 @@ export class BasicViewportApp {
     await IModelApp.startup({ applicationVersion: "1.0.0" });
 
     // initialize OIDC
-    await BasicViewportApp.initializeOidc();
+      await iModeljsApp.initializeOidc();
 
     // contains various initialization promises which need
     // to be fulfilled before the app is ready
     const initPromises = new Array<Promise<any>>();
 
     // initialize RPC communication
-    initPromises.push(BasicViewportApp.initializeRpc());
+      initPromises.push(iModeljsApp.initializeRpc());
 
     // initialize UiComponents
     initPromises.push(UiComponents.initialize(IModelApp.i18n));
@@ -51,7 +47,7 @@ export class BasicViewportApp {
     const rpcInterfaces = getSupportedRpcs();
     // Initialize the local backend if UseBackend.GeneralPurpose is not set.
     if (!rpcParams)
-      rpcParams = { info: { title: "basic-viewport-app", version: "v1.0" }, uriPrefix: "http://localhost:3001" };
+      rpcParams = { info: { title: "iModeljs-app", version: "v1.0" }, uriPrefix: "http://localhost:3001" };
     BentleyCloudRpcManager.initializeClient(rpcParams, rpcInterfaces);
   }
 
@@ -66,7 +62,7 @@ export class BasicViewportApp {
     IModelApp.authorizationClient = new BrowserAuthorizationClient(oidcConfig);
 
     try {
-      await BasicViewportApp.oidcClient.signInSilent(new ClientRequestContext());
+        await iModeljsApp.oidcClient.signInSilent(new ClientRequestContext());
     } catch (err) { }
   }
 

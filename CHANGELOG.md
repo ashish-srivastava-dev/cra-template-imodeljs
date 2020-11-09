@@ -7,5 +7,5 @@ Tue, 27 Oct 2020 17:45:35 GMT
 
 ### Breaking changes
 
-- Add CRA template for Basic Viewport App.
+- Added Create React App template for iModeljs App.
 
