@@ -95,7 +95,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   private get _signInRedirectUri() {
-    const split = (Config.App.get("REACT_APP_AUTH_CLIENT_REDIRECT_URI") as string).split("://");
+    const split = (Config.App.get("imjs_browser_test_redirect_uri") as string).split("://");
     return split[split.length - 1];
   }
 
@@ -140,7 +140,7 @@ class OpenIModelButton extends React.PureComponent<OpenIModelButtonProps, OpenIM
 
   /** Finds project and imodel ids using their names */
   private async getIModelInfo(): Promise<{ projectId: string, imodelId: string }> {
-    const imodelName = Config.App.get("REACT_APP_TEST_IMODEL_ID");
+    const imodelName = Config.App.get("imjs_test_imodel");
     const projectName = Config.App.get("imjs_test_project", imodelName);
 
     const requestContext: AuthorizedFrontendRequestContext = await AuthorizedFrontendRequestContext.create();

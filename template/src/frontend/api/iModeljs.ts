@@ -52,9 +52,9 @@ export class iModeljsApp {
   }
 
   private static async initializeOidc() {
-    const clientId = Config.App.getString("REACT_APP_AUTH_CLIENT_CLIENT_ID");
-    const redirectUri = Config.App.getString("REACT_APP_AUTH_CLIENT_REDIRECT_URI");
-    const scope = Config.App.getString("REACT_APP_AUTH_CLIENT_SCOPES");
+    const clientId = Config.App.getString("imjs_browser_test_client_id");
+    const redirectUri = Config.App.getString("imjs_browser_test_redirect_uri");
+    const scope = Config.App.getString("imjs_browser_test_scope");
     const responseType = "code";
     const oidcConfig: BrowserAuthorizationClientConfiguration = { clientId, redirectUri, scope, responseType };
 
@@ -66,9 +66,8 @@ export class iModeljsApp {
     } catch (err) { }
   }
 
-  private static async getConnectionInfo(): Promise<BentleyCloudRpcParams | undefined> {
-    //const usedBackend = Config.App.getNumber("imjs_backend", UseBackend.Local);
-      const usedBackend = UseBackend.GeneralPurpose;
+  private static async getConnectionInfo(): Promise<BentleyCloudRpcParams | undefined> {    
+    const usedBackend = UseBackend.GeneralPurpose;
 
     if (usedBackend === UseBackend.GeneralPurpose) {
       const urlClient = new UrlDiscoveryClient();
