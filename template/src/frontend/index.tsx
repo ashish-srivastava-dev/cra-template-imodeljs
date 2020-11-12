@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Logger, LogLevel } from "@bentley/bentleyjs-core";
 import { iModeljsApp } from "../api/iModeljs";
-import App from "./components/App";
+import App from "../components/App";
 import "./index.css";
 
 // Setup logging immediately to pick up any logging during iModeljsApp.startup()
