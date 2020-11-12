@@ -4,7 +4,7 @@ import { BentleyCloudRpcManager, BentleyCloudRpcParams } from "@bentley/imodeljs
 import { FrontendRequestContext, IModelApp } from "@bentley/imodeljs-frontend";
 import { UrlDiscoveryClient } from "@bentley/itwin-client";
 import { UiComponents } from "@bentley/ui-components";
-import { getSupportedRpcs } from "../../rpcs"
+import { getSupportedRpcs } from "../rpcs"
 
 /**
  * List of possible backends that iModeljs-app can use
