@@ -59,8 +59,7 @@
       "extends": "./node_modules/@bentley/build-tools/.eslintrc.js",
       "parserOptions": {
         "project": [
-          "tsconfig.json",
-          "tsconfig.backend.json"
+          "tsconfig.json"
         ]
       }
     }

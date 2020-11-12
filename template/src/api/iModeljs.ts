@@ -6,17 +6,6 @@ import { UrlDiscoveryClient } from "@bentley/itwin-client";
 import { UiComponents } from "@bentley/ui-components";
 import { getSupportedRpcs } from "../rpcs"
 
-/**
- * List of possible backends that iModeljs-app can use
- */
-export enum UseBackend {
-  /** Use local iModeljs-app backend */
-  Local = 0,
-
-  /** Use deployed general-purpose backend */
-  GeneralPurpose = 1,
-}
-
 // Boiler plate code
 export class iModeljsApp {
 
@@ -44,10 +33,10 @@ export class iModeljsApp {
 
   private static async initializeRpc(): Promise<void> {
     let rpcParams = await this.getConnectionInfo();
-    const rpcInterfaces = getSupportedRpcs();
-    // Initialize the local backend if UseBackend.GeneralPurpose is not set.
-    if (!rpcParams)
-      rpcParams = { info: { title: "iModeljs-app", version: "v1.0" }, uriPrefix: "http://localhost:3001" };
+    const rpcInterfaces = getSupportedRpcs();    
+    if (!rpcParams) {
+       throw new Error(`Error in setting GeneralPurpose backend`);
+    }
     BentleyCloudRpcManager.initializeClient(rpcParams, rpcInterfaces);
   }
 
@@ -67,18 +56,9 @@ export class iModeljsApp {
   }
 
   private static async getConnectionInfo(): Promise<BentleyCloudRpcParams | undefined> {    
-    const usedBackend = UseBackend.GeneralPurpose;
-
-    if (usedBackend === UseBackend.GeneralPurpose) {
-      const urlClient = new UrlDiscoveryClient();
-      const requestContext = new FrontendRequestContext();
-      const orchestratorUrl = await urlClient.discoverUrl(requestContext, "iModelJsOrchestrator.K8S", undefined);
-      return { info: { title: "general-purpose-imodeljs-backend", version: "v2.0" }, uriPrefix: orchestratorUrl };
-    }
-
-    if (usedBackend === UseBackend.Local)
-      return undefined;
-
-    throw new Error(`Invalid backend "${usedBackend}" specified in configuration`);
+     const urlClient = new UrlDiscoveryClient();
+     const requestContext = new FrontendRequestContext();
+     const orchestratorUrl = await urlClient.discoverUrl(requestContext, "iModelJsOrchestrator.K8S", undefined);
+     return { info: { title: "general-purpose-imodeljs-backend", version: "v2.0" }, uriPrefix: orchestratorUrl };
   }
 }

@@ -34,7 +34,7 @@
   },
   "private": true,
   "scripts": {
-    "build": "npm run build:backend & npm run build:frontend",
+    "build": "npm run build:frontend",
     "build:frontend": "cross-env GENERATE_SOURCEMAP=false USE_FAST_SASS=true react-scripts build",
     "clean": "rimraf build lib .rush",
     "lint": "eslint --config package.json --no-eslintrc ./src/**/*.{ts,tsx} 1>&2",
@@ -98,8 +98,7 @@
     "extends": "./node_modules/@bentley/build-tools/.eslintrc.js",
     "parserOptions": {
       "project": [
-        "tsconfig.json",
-        "tsconfig.backend.json"
+        "tsconfig.json"
       ]
     }
   }
