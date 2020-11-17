@@ -5,7 +5,7 @@ import { IModelQuery } from "@bentley/imodelhub-client";
 import { AuthorizedFrontendRequestContext, DrawingViewState, FrontendRequestContext, IModelApp, IModelConnection, RemoteBriefcaseConnection, SpatialViewState } from "@bentley/imodeljs-frontend";
 import { SignIn, ViewportComponent } from "@bentley/ui-components";
 import { Button, ButtonSize, ButtonType, Spinner, SpinnerSize } from "@bentley/ui-core";
-import * as React from "react";
+import React, {useState, useEffect } from "react";
 import { iModeljsApp } from "../api/App";
 import "./App.css";
 import Toolbar from "./Toolbar";
@@ -23,40 +23,42 @@ export interface AppState {
 }
 
 /** A component the renders the whole application UI */
-export default class App extends React.Component<{}, AppState> {
-
-  /** Creates an App instance */
-  constructor(props?: any, context?: any) {
-    super(props, context);
-    this.state = {
-      user: {
+//export default class App extends React.Component<{}, AppState> {
+const App = () => {  
+    const [user, setUser] = useState({
         isAuthorized: iModeljsApp.oidcClient.isAuthorized,
         isLoading: false,
-      },
-    };
-  }
+    });
+    //const [imodel, ]
 
-  public componentDidMount() {
-    // Initialize authorization state, and add listener to changes
-    iModeljsApp.oidcClient.onUserStateChanged.addListener(this._onUserStateChanged);
-  }
+  //public componentDidMount() {
+    useEffect(() => {
+        // Initialize authorization state, and add listener to changes
+        iModeljsApp.oidcClient.onUserStateChanged.addListener(_onUserStateChanged);
+    }, [])
 
-  public componentWillUnmount() {
-    // unsubscribe from user state changes
-    iModeljsApp.oidcClient.onUserStateChanged.removeListener(this._onUserStateChanged);
-  }
+  //public componentWillUnmount() {
+  //  // unsubscribe from user state changes
+  //  iModeljsApp.oidcClient.onUserStateChanged.removeListener(this._onUserStateChanged);
+  //}
 
-  private _onStartSignin = async () => {
-    this.setState((prev) => ({ user: { ...prev.user, isLoading: true } }));
-    iModeljsApp.oidcClient.signIn(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
-  }
+    const _onStartSignin = async () => {
+        setUser({
+            isAuthorized: user.isAuthorized,
+            isLoading: true
+        });
+        iModeljsApp.oidcClient.signIn(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
+    }
 
-  private _onUserStateChanged = () => {
-    this.setState((prev) => ({ user: { ...prev.user, isAuthorized: iModeljsApp.oidcClient.isAuthorized, isLoading: false } }));
-  }
+    const _onUserStateChanged = () => {
+        setUser({
+            isAuthorized: iModeljsApp.oidcClient.isAuthorized,
+            isLoading: false
+        });
+    }
 
   /** Pick the first available spatial view definition in the imodel */
-  private async getFirstViewDefinitionId(imodel: IModelConnection): Promise<Id64String> {
+  const getFirstViewDefinitionId = async (imodel: IModelConnection): Promise<Id64String> => {
     // Return default view definition (if any)
     const defaultViewId = await imodel.views.queryDefaultViewId();
     if (Id64.isValid(defaultViewId))
@@ -76,7 +78,7 @@ export default class App extends React.Component<{}, AppState> {
   }
 
   /** Handle iModel open event */
-  private _onIModelSelected = async (imodel: IModelConnection | undefined) => {
+  const _onIModelSelected = async (imodel: IModelConnection | undefined) => {
     if (!imodel) {
       // reset the state when imodel is closed
       this.setState({ imodel: undefined, viewDefinitionId: undefined });
@@ -94,13 +96,14 @@ export default class App extends React.Component<{}, AppState> {
     }
   }
 
-  private get _signInRedirectUri() {
+  const _signInRedirectUri = () => {
     const split = (Config.App.get("imjs_browser_test_redirect_uri") as string).split("://");
     return split[split.length - 1];
   }
 
   /** The component's render method */
-  public render() {
+ // public render() {
+
     let ui: React.ReactNode;
 
     if (this.state.user.isLoading || window.location.href.includes(this._signInRedirectUri)) {
@@ -118,7 +121,7 @@ export default class App extends React.Component<{}, AppState> {
     }
 
     // render the app
-    return (
+   return (
       <div className="app">
         {ui}
       </div>
@@ -225,3 +228,4 @@ class IModelComponents extends React.PureComponent<IModelComponentsProps> {
     );
   }
 }
+export default App;
