@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { Logger, LogLevel } from "@bentley/bentleyjs-core";
-import { iModeljsApp } from "./api/iModeljs";
+import { iModeljsApp } from "./api/App";
 import App from "./components/App";
 import "./index.css";
 

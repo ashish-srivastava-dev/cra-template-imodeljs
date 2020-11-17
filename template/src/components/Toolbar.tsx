@@ -1,6 +1,6 @@
 import { FitViewTool, IModelApp, PanViewTool, RotateViewTool, SelectionTool, ZoomViewTool } from "@bentley/imodeljs-frontend";
 import * as React from "react";
-import "./Components.scss";
+import "./Toolbar.scss";
 
 /** Toolbar containing simple navigation tools */
 const toolbar = () => {

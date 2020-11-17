@@ -4,7 +4,17 @@ import { BentleyCloudRpcManager, BentleyCloudRpcParams } from "@bentley/imodeljs
 import { FrontendRequestContext, IModelApp } from "@bentley/imodeljs-frontend";
 import { UrlDiscoveryClient } from "@bentley/itwin-client";
 import { UiComponents } from "@bentley/ui-components";
-import { getSupportedRpcs } from "../rpcs"
+import { IModelReadRpcInterface, IModelTileRpcInterface, RpcInterfaceDefinition } from "@bentley/imodeljs-common";
+
+/**
+ * Returns a list of RPCs supported by this application
+ */
+export function getSupportedRpcs(): RpcInterfaceDefinition[] {
+  return [
+    IModelReadRpcInterface,
+    IModelTileRpcInterface,
+  ];
+}
 
 // Boiler plate code
 export class iModeljsApp {

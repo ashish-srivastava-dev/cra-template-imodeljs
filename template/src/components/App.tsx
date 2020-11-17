@@ -6,7 +6,7 @@ import { AuthorizedFrontendRequestContext, DrawingViewState, FrontendRequestCont
 import { SignIn, ViewportComponent } from "@bentley/ui-components";
 import { Button, ButtonSize, ButtonType, Spinner, SpinnerSize } from "@bentley/ui-core";
 import * as React from "react";
-import { iModeljsApp } from "../api/iModeljs";
+import { iModeljsApp } from "../api/App";
 import "./App.css";
 import Toolbar from "./Toolbar";
 
