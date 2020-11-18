@@ -10,8 +10,6 @@ import { iModeljsApp } from "../api/App";
 import "./App.css";
 import Toolbar from "./Toolbar";
 
-// cSpell:ignore imodels
-
 /** React state of the App component */
 export interface AppState {
   user: {
@@ -23,37 +21,35 @@ export interface AppState {
 }
 
 /** A component the renders the whole application UI */
-//export default class App extends React.Component<{}, AppState> {
 const App = () => {  
-    const [user, setUser] = useState({
-        isAuthorized: iModeljsApp.oidcClient.isAuthorized,
-        isLoading: false,
+    const [appState, setAppState] = useState<AppState>({
+        user: {
+            isAuthorized: iModeljsApp.oidcClient.isAuthorized,
+            isLoading: false
+        }
     });
-    //const [imodel, ]
-
-  //public componentDidMount() {
+    
     useEffect(() => {
         // Initialize authorization state, and add listener to changes
         iModeljsApp.oidcClient.onUserStateChanged.addListener(_onUserStateChanged);
-    }, [])
-
-  //public componentWillUnmount() {
-  //  // unsubscribe from user state changes
-  //  iModeljsApp.oidcClient.onUserStateChanged.removeListener(this._onUserStateChanged);
-  //}
+    }, []);  
 
     const _onStartSignin = async () => {
-        setUser({
-            isAuthorized: user.isAuthorized,
-            isLoading: true
+        setAppState({
+            user: {
+                isAuthorized: appState.user.isAuthorized,
+                isLoading: true
+            }
         });
         iModeljsApp.oidcClient.signIn(new FrontendRequestContext());  // eslint-disable-line @typescript-eslint/no-floating-promises
     }
 
     const _onUserStateChanged = () => {
-        setUser({
-            isAuthorized: iModeljsApp.oidcClient.isAuthorized,
-            isLoading: false
+        setAppState({
+            user: {
+                isAuthorized: iModeljsApp.oidcClient.isAuthorized,
+                isLoading: false
+            }
         });
     }
 
@@ -81,17 +77,29 @@ const App = () => {
   const _onIModelSelected = async (imodel: IModelConnection | undefined) => {
     if (!imodel) {
       // reset the state when imodel is closed
-      this.setState({ imodel: undefined, viewDefinitionId: undefined });
+        setAppState({
+            user: appState.user,
+            imodel: undefined,
+            viewDefinitionId: undefined
+        });
       return;
     }
     try {
       // attempt to get a view definition
-      const viewDefinitionId = await this.getFirstViewDefinitionId(imodel);
-      this.setState({ imodel, viewDefinitionId });
+        const viewDefinitionId = await getFirstViewDefinitionId(imodel);
+        setAppState({
+            user: appState.user,
+            imodel: imodel,
+            viewDefinitionId: viewDefinitionId
+        });
     } catch (e) {
       // if failed, close the imodel and reset the state
-      await imodel.close();
-      this.setState({ imodel: undefined, viewDefinitionId: undefined });
+        await imodel.close();
+        setAppState({
+            user: appState.user,
+            imodel: undefined,
+            viewDefinitionId: undefined
+        });
       alert(e.message);
     }
   }
@@ -102,22 +110,20 @@ const App = () => {
   }
 
   /** The component's render method */
- // public render() {
-
     let ui: React.ReactNode;
 
-    if (this.state.user.isLoading || window.location.href.includes(this._signInRedirectUri)) {
+    if (appState.user.isLoading || window.location.href.includes(_signInRedirectUri())) {
       // if user is currently being loaded, just tell that
       ui = `signing-in...`;
-    } else if (!this.state.user.isAuthorized) {
+    } else if (!appState.user.isAuthorized) {
       // if user doesn't have and access token, show sign in page
-      ui = (<SignIn onSignIn={this._onStartSignin} />);
-    } else if (!this.state.imodel || !this.state.viewDefinitionId) {
+      ui = (<SignIn onSignIn={_onStartSignin} />);
+    } else if (!appState.imodel || !appState.viewDefinitionId) {
       // if we don't have an imodel / view definition id - render a button that initiates imodel open
-      ui = (<OpenIModelButton onIModelSelected={this._onIModelSelected} />);
+      ui = (<OpenIModelButton onIModelSelected={_onIModelSelected} />);
     } else {
       // if we do have an imodel and view definition id - render imodel components
-      ui = (<IModelComponents imodel={this.state.imodel} viewDefinitionId={this.state.viewDefinitionId} />);
+      ui = (<IModelComponents imodel={appState.imodel} viewDefinitionId={appState.viewDefinitionId} />);
     }
 
     // render the app
@@ -127,7 +133,6 @@ const App = () => {
       </div>
     );
   }
-}
 
 /** React props for [[OpenIModelButton]] component */
 interface OpenIModelButtonProps {
