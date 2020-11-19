@@ -17,7 +17,7 @@ export function getSupportedRpcs(): RpcInterfaceDefinition[] {
 }
 
 // Boiler plate code
-export class iModeljsApp {
+export class App {
 
   public static get oidcClient() { return IModelApp.authorizationClient as BrowserAuthorizationClient; }
 
@@ -25,14 +25,14 @@ export class iModeljsApp {
     await IModelApp.startup({ applicationVersion: "1.0.0" });
 
     // initialize OIDC
-      await iModeljsApp.initializeOidc();
+    await App.initializeOidc();
 
     // contains various initialization promises which need
     // to be fulfilled before the app is ready
     const initPromises = new Array<Promise<any>>();
 
     // initialize RPC communication
-      initPromises.push(iModeljsApp.initializeRpc());
+    initPromises.push(App.initializeRpc());
 
     // initialize UiComponents
     initPromises.push(UiComponents.initialize(IModelApp.i18n));
@@ -43,9 +43,9 @@ export class iModeljsApp {
 
   private static async initializeRpc(): Promise<void> {
     let rpcParams = await this.getConnectionInfo();
-    const rpcInterfaces = getSupportedRpcs();    
+    const rpcInterfaces = getSupportedRpcs();
     if (!rpcParams) {
-       throw new Error(`Error in setting GeneralPurpose backend`);
+      throw new Error(`Error in setting GeneralPurpose backend`);
     }
     BentleyCloudRpcManager.initializeClient(rpcParams, rpcInterfaces);
   }
@@ -61,14 +61,14 @@ export class iModeljsApp {
     IModelApp.authorizationClient = new BrowserAuthorizationClient(oidcConfig);
 
     try {
-        await iModeljsApp.oidcClient.signInSilent(new ClientRequestContext());
+      await App.oidcClient.signInSilent(new ClientRequestContext());
     } catch (err) { }
   }
 
-  private static async getConnectionInfo(): Promise<BentleyCloudRpcParams | undefined> {    
-     const urlClient = new UrlDiscoveryClient();
-     const requestContext = new FrontendRequestContext();
-     const orchestratorUrl = await urlClient.discoverUrl(requestContext, "iModelJsOrchestrator.K8S", undefined);
-     return { info: { title: "general-purpose-imodeljs-backend", version: "v2.0" }, uriPrefix: orchestratorUrl };
+  private static async getConnectionInfo(): Promise<BentleyCloudRpcParams | undefined> {
+    const urlClient = new UrlDiscoveryClient();
+    const requestContext = new FrontendRequestContext();
+    const orchestratorUrl = await urlClient.discoverUrl(requestContext, "iModelJsOrchestrator.K8S", undefined);
+    return { info: { title: "general-purpose-imodeljs-backend", version: "v2.0" }, uriPrefix: orchestratorUrl };
   }
 }
